@@ -2,6 +2,7 @@ package main
 
 import (
 	"github.com/gin-gonic/gin"
+	"zhuchong6.com/gin-prictise/middleware"
 	"zhuchong6.com/gin-prictise/route"
 	"zhuchong6.com/gin-prictise/templates"
 )
@@ -40,5 +41,11 @@ func main() {
 
 	// curl --request GET --url http://localhost:8080/hello
 	templates.HelloHtml(r)
+
+	middleware.GlobalMiddleware(r)
+	middleware.RouteMiddleware(r)
+	middleware.GroupMiddleware(r)
+	middleware.CustomerMiddleware(r)
+
 	r.Run()
 }
