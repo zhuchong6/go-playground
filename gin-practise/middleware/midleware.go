@@ -46,7 +46,7 @@ func CustomerMiddleware(r *gin.Engine) {
 
 // customer a middleware that return gin.HandlerFunc type
 func customerMiddlewareLogger() gin.HandlerFunc {
-	return func(c *gin.Context) {
+	customerMiddleware := func(c *gin.Context) {
 		t := time.Now()
 
 		// Set example variable
@@ -66,4 +66,5 @@ func customerMiddlewareLogger() gin.HandlerFunc {
 		status := c.Writer.Status()
 		log.Println(status)
 	}
+	return customerMiddleware
 }
