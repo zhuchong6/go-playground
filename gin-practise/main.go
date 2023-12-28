@@ -28,6 +28,8 @@ func main() {
 	// curl "http://localhost:8080/bindFormDataToStruct?name=aaa&age=222"
 	// will return {"age":222,"name":"aaa"}
 	route.NoBindFormData(r)
+	//
+	route.BindDataFromUri(r)
 
 	// curl --request POST --url http://localhost:8080/uploadOne --header 'content-type: multipart/form-data' --form file=@/Users/knight/Desktop/ic.png
 	route.UploadOneFile(r)
