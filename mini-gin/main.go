@@ -33,5 +33,17 @@ func main() {
 		})
 	})
 
+	v1 := r.Group("/v1")
+	{
+		v1.GET("/", func(c *mgin.Context) {
+			c.HTML(http.StatusOK, "<h1>Hello mgin</h1>")
+		})
+
+		v1.GET("/hello", func(c *mgin.Context) {
+			// expect /hello?name=geektutu
+			c.String(http.StatusOK, "hello %s, you're at %s\n", c.Query("name"), c.Path)
+		})
+	}
+
 	r.Run(":8080")
 }
