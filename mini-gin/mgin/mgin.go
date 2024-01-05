@@ -60,6 +60,7 @@ func (group *RouterGroup) POST(pattern string, handler HandleFunc) {
 }
 
 // Run defines the method to start a http server
+// engine implement ServeHTTP method, engine can be seen as a Handler interface
 func (engine *Engine) Run(addr string) (err error) {
 	return http.ListenAndServe(addr, engine)
 }
