@@ -21,9 +21,13 @@ type Context struct {
 
 	// response info
 	StatusCode int
+
+	// middleware
+	handlers []HandleFunc
+	index    int
 }
 
-func (c *Context) Param(key string) string{
+func (c *Context) Param(key string) string {
 	value, _ := c.Params[key]
 	return value
 }
@@ -35,8 +39,17 @@ func newContext(response http.ResponseWriter, request *http.Request) *Context {
 		Req:    request,
 		Path:   request.URL.Path,
 		Method: request.Method,
+		index:  -1,
 	}
 	return context
+}
+
+func (c *Context) Next() {
+	c.index++
+	s := len(c.handlers)
+	for ; c.index < s; c.index++ {
+		c.handlers[c.index](c)
+	}
 }
 
 // process postform param
@@ -82,4 +95,9 @@ func (c *Context) HTML(code int, html string) {
 	c.SetHeader("Content-Type", "text/html")
 	c.Status(code)
 	c.Writer.Write([]byte(html))
+}
+
+func (c *Context) Fail(code int, err string) {
+	c.index = len(c.handlers)
+	c.JSON(code, H{"message": err})
 }

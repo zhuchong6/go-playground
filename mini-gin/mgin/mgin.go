@@ -2,6 +2,7 @@ package mgin
 
 import (
 	"net/http"
+	"strings"
 )
 
 type RouterGroup struct {
@@ -67,6 +68,18 @@ func (engine *Engine) Run(addr string) (err error) {
 
 // engine must implement ServeHTTP method, then you can http.ListenAndServe(addr, engine)
 func (engine *Engine) ServeHTTP(response http.ResponseWriter, request *http.Request) {
+	var middlewares []HandleFunc
+	for _, group := range engine.groups {
+		if strings.HasPrefix(request.URL.Path, group.prefix) {
+			middlewares = append(middlewares, group.middlewares...)
+		}
+	}
+
 	c := newContext(response, request)
+	c.handlers = middlewares
 	engine.router.handle(c)
+}
+
+func (group *RouterGroup) Use(middlewares ...HandleFunc) {
+	group.middlewares = append(group.middlewares, middlewares...)
 }
