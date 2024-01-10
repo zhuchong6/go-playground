@@ -42,6 +42,14 @@ func New() *Engine {
 	return currentEngine
 }
 
+// gee.go
+// Default use Logger() & Recovery middlewares
+func Default() *Engine {
+	engine := New()
+	engine.Use(Recovery())
+	return engine
+}
+
 // group is defined to create new RouterGroup
 // remember all groups share the same Engine instance
 func (group *RouterGroup) Group(prefix string) *RouterGroup {

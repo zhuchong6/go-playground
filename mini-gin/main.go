@@ -11,7 +11,7 @@ import (
 )
 
 func main() {
-	r := mgin.New()
+	r := mgin.Default()
 
 	r.GET("/hello", func(c *mgin.Context) {
 		c.String(http.StatusOK, "hello %s, you're at \"%s\"\n", c.Query("name"), c.Path)
@@ -59,7 +59,13 @@ func main() {
 	r.GET("/", func(c *mgin.Context) {
 		c.HTML(http.StatusOK, "css.tmpl", nil)
 	})
+
+	r.GET("/panicTest", PanicHandler)
 	r.Run(":8080")
+}
+
+func PanicHandler(c *mgin.Context) {
+	panic("panic")
 }
 
 func FormatAsDate(t time.Time) string {
