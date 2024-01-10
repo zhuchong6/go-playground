@@ -1,6 +1,8 @@
 package main
 
 import (
+	"fmt"
+	"html/template"
 	"log"
 	"net/http"
 	"time"
@@ -10,10 +12,6 @@ import (
 
 func main() {
 	r := mgin.New()
-
-	r.GET("/", func(c *mgin.Context) {
-		c.HTML(http.StatusOK, "<h1>hello html</h1>")
-	})
 
 	r.GET("/hello", func(c *mgin.Context) {
 		c.String(http.StatusOK, "hello %s, you're at \"%s\"\n", c.Query("name"), c.Path)
@@ -37,10 +35,6 @@ func main() {
 
 	v1 := r.Group("/v1")
 	{
-		v1.GET("/", func(c *mgin.Context) {
-			c.HTML(http.StatusOK, "<h1>Hello mgin</h1>")
-		})
-
 		v1.GET("/hello", func(c *mgin.Context) {
 			// expect /hello?name=geektutu
 			c.String(http.StatusOK, "hello %s, you're at %s\n", c.Query("name"), c.Path)
@@ -56,7 +50,21 @@ func main() {
 		})
 	}
 
+	r.SetFuncMap(template.FuncMap{
+		"FormatAsDate": FormatAsDate,
+	})
+	r.LoadHtmlGlob("template/**")
+	r.Static("/assets", "./static")
+
+	r.GET("/", func(c *mgin.Context) {
+		c.HTML(http.StatusOK, "css.tmpl", nil)
+	})
 	r.Run(":8080")
+}
+
+func FormatAsDate(t time.Time) string {
+	year, month, day := t.Date()
+	return fmt.Sprintf("%d-%02d-%02d", year, month, day)
 }
 
 func onlyForV2() mgin.HandleFunc {
