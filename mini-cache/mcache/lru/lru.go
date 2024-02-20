@@ -2,7 +2,7 @@ package lru
 
 import "container/list"
 
-// Cache is a LRU cache ,not safe for concurrent access
+// Cache is an LRU cache ,not safe for concurrent access
 type Cache struct {
 	maxBytes int64
 	nBytes   int64
@@ -12,7 +12,7 @@ type Cache struct {
 	OnEvicted func(key string, value Value)
 }
 
-func (c *Cache) Len() int{
+func (c *Cache) Len() int {
 	return c.ll.Len()
 }
 
@@ -26,7 +26,7 @@ type Value interface {
 	Len() int
 }
 
-// Cache's constructor
+// New Cache's constructor
 func New(maxBytes int64, onEvicted func(string, Value)) *Cache {
 	return &Cache{
 		maxBytes:  maxBytes,
@@ -37,7 +37,7 @@ func New(maxBytes int64, onEvicted func(string, Value)) *Cache {
 }
 
 // RemoveOldest removes the oldest item
-func (c *Cache) RemoveOldest(){
+func (c *Cache) RemoveOldest() {
 	ele := c.ll.Back()
 	if ele != nil {
 		c.ll.Remove(ele)
@@ -63,12 +63,12 @@ func (c *Cache) Add(key string, value Value) {
 		c.nBytes += int64(len(key)) + int64(value.Len())
 	}
 
-	for c.maxBytes !=0 && c.maxBytes < c.nBytes {
+	for c.maxBytes != 0 && c.maxBytes < c.nBytes {
 		c.RemoveOldest()
 	}
 }
 
-// get key
+// Get key
 // 1. find node from map
 // 2. move node to the top of the double linked list
 func (c *Cache) Get(key string) (value Value, ok bool) {
