@@ -15,7 +15,10 @@ func main() {
 	}
 
 	// 迁移 schema
-	db.AutoMigrate(&model.UserBasic{})
+	err = db.AutoMigrate(&model.UserBasic{})
+	if err != nil {
+		return
+	}
 
 	userBasic := &model.UserBasic{}
 	userBasic.Name = "zcc2"
