@@ -39,3 +39,14 @@ func FindUserList() []*UserBasic {
 func CreateUser(user UserBasic) *gorm.DB {
 	return utils.Conn.Create(&user)
 }
+
+func DeleteUser(user UserBasic) *gorm.DB {
+	return utils.Conn.Delete(&user)
+}
+
+func UpdateUser(user UserBasic) *gorm.DB {
+	return utils.Conn.Model(&user).Updates(&UserBasic{
+		Name:     user.Name,
+		Password: user.Password,
+	})
+}

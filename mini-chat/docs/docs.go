@@ -18,7 +18,7 @@ const docTemplate = `{
         "/index": {
             "get": {
                 "tags": [
-                    "首页"
+                    "index"
                 ],
                 "responses": {
                     "200": {
@@ -33,26 +33,50 @@ const docTemplate = `{
         "/user/create": {
             "get": {
                 "tags": [
-                    "用户模块"
+                    "User"
                 ],
-                "summary": "新增用户",
+                "summary": "add a new user",
                 "parameters": [
                     {
                         "type": "string",
-                        "description": "用户名",
+                        "description": "name",
                         "name": "name",
                         "in": "query"
                     },
                     {
                         "type": "string",
-                        "description": "密码",
+                        "description": "password",
                         "name": "pwd",
                         "in": "query"
                     },
                     {
                         "type": "string",
-                        "description": "重复密码",
+                        "description": "repeat password",
                         "name": "repwd",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "code\",\"message\"}",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/user/deleteUser": {
+            "get": {
+                "tags": [
+                    "User"
+                ],
+                "summary": "delete user by user's id",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "id",
+                        "name": "id",
                         "in": "query"
                     }
                 ],
@@ -69,12 +93,48 @@ const docTemplate = `{
         "/user/list": {
             "get": {
                 "tags": [
-                    "用户模块"
+                    "User"
                 ],
-                "summary": "用户列表",
+                "summary": "query user‘s list",
                 "responses": {
                     "200": {
                         "description": "code\",\"userList\"}",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/user/updateUser": {
+            "post": {
+                "tags": [
+                    "User"
+                ],
+                "summary": "modify user's info",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "id",
+                        "name": "id",
+                        "in": "formData"
+                    },
+                    {
+                        "type": "string",
+                        "description": "name",
+                        "name": "name",
+                        "in": "formData"
+                    },
+                    {
+                        "type": "string",
+                        "description": "password",
+                        "name": "pwd",
+                        "in": "formData"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "code\",\"message\"}",
                         "schema": {
                             "type": "string"
                         }
@@ -87,12 +147,12 @@ const docTemplate = `{
 
 // SwaggerInfo holds exported Swagger Info so clients can modify it
 var SwaggerInfo = &swag.Spec{
-	Version:          "",
+	Version:          "1.0",
 	Host:             "",
 	BasePath:         "",
 	Schemes:          []string{},
-	Title:            "",
-	Description:      "",
+	Title:            "mini-cha",
+	Description:      "this project is used for learning",
 	InfoInstanceName: "swagger",
 	SwaggerTemplate:  docTemplate,
 	LeftDelim:        "{{",

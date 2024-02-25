@@ -19,6 +19,7 @@ func InitConfig() {
 	err := viper.ReadInConfig()
 	if err != nil {
 		fmt.Println(err)
+		panic(err)
 		return
 	}
 	fmt.Println("config app: ", viper.Get("app"))
@@ -26,7 +27,7 @@ func InitConfig() {
 }
 
 func InitMysql() {
-	// 自定义日志打印sql语句
+	// config log to print log
 	log := logger.New(
 		log2.New(os.Stdout, "\r\n", log2.LstdFlags),
 		logger.Config{
@@ -37,8 +38,11 @@ func InitMysql() {
 	)
 	dsn := viper.GetString("mysql.dns")
 	fmt.Println("---", dsn)
-	Conn, _ = gorm.Open(mysql.Open(dsn), &gorm.Config{Logger: log})
-	//user := model.UserBasic{}
-	//Conn.Find(&user)
-	//fmt.Println(user)
+	db, err := gorm.Open(mysql.Open(dsn), &gorm.Config{Logger: log})
+	if err != nil {
+		fmt.Println(err)
+		panic(err)
+		return
+	}
+	Conn = db
 }

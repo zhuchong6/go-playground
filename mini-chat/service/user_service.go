@@ -3,11 +3,12 @@ package service
 import (
 	"github.com/gin-gonic/gin"
 	"minichat/model"
+	"strconv"
 )
 
 // GetUserServiceList
-// @Tags 用户模块
-// @Summary 用户列表
+// @Tags User
+// @Summary query user‘s list
 // @Success 200 {string} json{"code","userList"}
 // @Router /user/list [get]
 func GetUserServiceList(c *gin.Context) {
@@ -18,11 +19,11 @@ func GetUserServiceList(c *gin.Context) {
 }
 
 // CreateUser
-// @Tags 用户模块
-// @Summary 新增用户
-// @param name query string false "用户名"
-// @param pwd query string false "密码"
-// @param repwd query string false "重复密码"
+// @Tags User
+// @Summary add a new user
+// @param name query string false "name"
+// @param pwd query string false "password"
+// @param repwd query string false "repeat password"
 // @Success 200 {string} json{"code","message"}
 // @Router /user/create [get]
 func CreateUser(c *gin.Context) {
@@ -32,13 +33,53 @@ func CreateUser(c *gin.Context) {
 	repwd := c.Query("repwd")
 	if pwd != repwd {
 		c.JSON(-1, gin.H{
-			"message": "两次密码不一致",
+			"message": "Entered passwords differ",
 		})
 		return
 	}
 	user.Password = pwd
 	model.CreateUser(user)
 	c.JSON(200, gin.H{
-		"message": "新增用户成功",
+		"message": "success",
+	})
+}
+
+// DeleteUser
+// @Tags User
+// @Summary delete user by user's id
+// @param id query string false "id"
+// @Success 200 {string} json{"code","message"}
+// @Router /user/deleteUser [get]
+func DeleteUser(c *gin.Context) {
+	user := model.UserBasic{}
+
+	id, _ := strconv.Atoi(c.Query("id"))
+
+	user.ID = uint(id)
+	model.DeleteUser(user)
+	c.JSON(200, gin.H{
+		"message": "success",
+	})
+}
+
+// UpdateUser
+// @Tags User
+// @Summary modify user's info
+// @param id formData string false "id"
+// @param name formData string false "name"
+// @param pwd formData string false "password"
+// @Success 200 {string} json{"code","message"}
+// @Router /user/updateUser [post]
+func UpdateUser(c *gin.Context) {
+	user := model.UserBasic{}
+
+	id, _ := strconv.Atoi(c.PostForm("id"))
+	user.Name = c.PostForm("name")
+	user.Password = c.PostForm("pwd")
+
+	user.ID = uint(id)
+	model.UpdateUser(user)
+	c.JSON(200, gin.H{
+		"message": "success",
 	})
 }
