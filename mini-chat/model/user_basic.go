@@ -59,9 +59,3 @@ func FindUserByName(name string) UserBasic {
 	utils.Conn.Where("name = ?", name).First(&user)
 	return user
 }
-
-func FindUserByPhone(phone string) UserBasic {
-	user := UserBasic{}
-	utils.Conn.Where("phone = ?", phone).First(&user)
-	return user
-}
