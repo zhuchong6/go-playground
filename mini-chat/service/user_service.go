@@ -2,10 +2,11 @@ package service
 
 import (
 	"fmt"
-	"github.com/asaskevich/govalidator"
-	"github.com/gin-gonic/gin"
 	"minichat/model"
 	"strconv"
+
+	"github.com/asaskevich/govalidator"
+	"github.com/gin-gonic/gin"
 )
 
 // GetUserServiceList
@@ -36,6 +37,13 @@ func CreateUser(c *gin.Context) {
 	if pwd != repwd {
 		c.JSON(-1, gin.H{
 			"message": "Entered passwords differ",
+		})
+		return
+	}
+	userFromDb := model.FindUserByName(user.Name)
+	if userFromDb.Name != "" {
+		c.JSON(200, gin.H{
+			"message": "用户已经存在",
 		})
 		return
 	}

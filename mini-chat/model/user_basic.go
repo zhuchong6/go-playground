@@ -2,9 +2,10 @@ package model
 
 import (
 	"fmt"
-	"gorm.io/gorm"
 	"minichat/utils"
 	"time"
+
+	"gorm.io/gorm"
 )
 
 type UserBasic struct {
@@ -51,4 +52,16 @@ func UpdateUser(user UserBasic) *gorm.DB {
 		Phone:    user.Phone,
 		Email:    user.Email,
 	})
+}
+
+func FindUserByName(name string) UserBasic {
+	user := UserBasic{}
+	utils.Conn.Where("name = ?", name).First(&user)
+	return user
+}
+
+func FindUserByPhone(phone string) UserBasic {
+	user := UserBasic{}
+	utils.Conn.Where("phone = ?", phone).First(&user)
+	return user
 }
