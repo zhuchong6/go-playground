@@ -43,7 +43,7 @@ func CreateUser(c *gin.Context) {
 	userFromDb := model.FindUserByName(user.Name)
 	if userFromDb.Name != "" {
 		c.JSON(200, gin.H{
-			"message": "用户已经存在",
+			"message": "user already exist",
 		})
 		return
 	}
