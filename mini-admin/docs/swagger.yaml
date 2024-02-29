@@ -1,0 +1,37 @@
+info:
+  contact:
+    name: zhuchong6.github.io
+  description: admin project
+  title: mini-admin
+  version: "1.0"
+paths:
+  /index:
+    get:
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: code":"200", "msg":"success", "data":"idnex" }
+          schema:
+            type: string
+      summary: indexPage
+      tags:
+      - index
+  /users/getUserByName:
+    get:
+      parameters:
+      - description: user's name
+        in: query
+        name: name
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: code":"200", "msg":"success", "data":"idnex" }
+          schema:
+            type: string
+      summary: GetUserByName
+      tags:
+      - user
+swagger: "2.0"
